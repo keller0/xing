@@ -4,15 +4,21 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 	log "github.com/sirupsen/logrus"
+	"os"
 )
 
 var Gdb *gorm.DB
 
 func InitSqlite(dbPath string) {
-	if len(dbPath) == 0 {
-		panic("no db path")
-	}
+
 	var err error
+	fi, err := os.Stat(dbPath)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Info("open db file", fi.Name())
+
 	Gdb, err = gorm.Open("sqlite3", dbPath)
 	if err != nil {
 		panic(err)

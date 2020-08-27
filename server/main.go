@@ -10,7 +10,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"os"
 	"runtime"
 	"strings"
 )
@@ -27,7 +26,7 @@ func init() {
 	var configFile = flag.String("conf", "./config.yaml", "config file path")
 	flag.StringVar(&serverHost, "host", "127.0.0.1", "listen address")
 	flag.StringVar(&serverPort, "port", "6666", "listen port")
-	flag.StringVar(&dbPath, "db", "", "database path")
+	flag.StringVar(&dbPath, "db", "x.db", "database path")
 	flag.Parse()
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -45,15 +44,6 @@ func init() {
 		panic(err)
 	}
 	log.SetLevel(lv)
-	f, err := os.OpenFile(configs.App.LogPath, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
-	if err != nil {
-		panic(err)
-	}
-	log.SetOutput(f)
-
-	loggerMd = middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Output: f,
-	})
 
 	allowOrigin = strings.Split(configs.App.AllowOrigin, " ")
 	if len(allowOrigin) <= 0 {
