@@ -25,8 +25,8 @@ func Login(c echo.Context) error {
 	}
 
 	if len(req.Name) < 3 || len(req.Pass) < 3 {
-		log.Info("name pass too short")
-		return c.String(http.StatusBadRequest, "bad request")
+		log.Info("username or password is too short")
+		return c.String(http.StatusBadRequest, "username or password is too short")
 	}
 
 	// check user pass

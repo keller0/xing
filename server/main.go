@@ -19,7 +19,6 @@ var (
 	serverPort  string
 	dbPath      string
 	allowOrigin []string
-	loggerMd    echo.MiddlewareFunc
 )
 
 func init() {
@@ -61,17 +60,16 @@ func main() {
 	e.HideBanner = true
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowCredentials: true,
-		AllowOrigins:     allowOrigin,
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, "token"},
 	}))
 
 	// Middleware
-	e.Use(loggerMd)
+	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
 	// Routes
 	router.Register(e)
 
 	// Start server
-	e.Logger.Fatal(e.Start(serverHost + ":" + serverPort))
+	e.Logger.Fatal(e.Start(":1323"))
 }
