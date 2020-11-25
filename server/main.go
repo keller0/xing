@@ -24,7 +24,7 @@ var (
 func init() {
 	var configFile = flag.String("conf", "./config.yaml", "config file path")
 	flag.StringVar(&serverHost, "host", "127.0.0.1", "listen address")
-	flag.StringVar(&serverPort, "port", "6666", "listen port")
+	flag.StringVar(&serverPort, "port", "1323", "listen port")
 	flag.StringVar(&dbPath, "db", "x.db", "database path")
 	flag.Parse()
 
@@ -71,5 +71,5 @@ func main() {
 	router.Register(e)
 
 	// Start server
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(serverHost + ":" + serverPort))
 }

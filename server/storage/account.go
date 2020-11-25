@@ -13,7 +13,7 @@ type User struct {
 	Id         string    `json:"id" gorm:"column:id"`
 	Name       string    `json:"name" gorm:"column:name"`
 	Pass       string    `json:"pass" gorm:"column:pass"`
-	CreateTime time.Time `json:"create_time" gorm:"column:create_time"`
+	CreateTime time.Time `json:"create_time" gorm:"column:create_time type:datetime"`
 }
 
 func (user *User) CheckUserAuth() bool {
