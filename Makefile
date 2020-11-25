@@ -12,15 +12,11 @@ fmt: ## format all go files (use go)
 vet: ## vat all go files (use go)
 	go vet $(PACKAGES)
 
-build:fmt vet ## format vet and compile (use go)
+build:fmt vet ## format vet and compile server (use go)
 	go build -ldflags '-w -s' -o XingServer server/main.go
 
-.PHONY: dev
-dev:fmt vet ## format vet compile and run (use go)
-	go build -mod=vendor -ldflags '-w -s' -o main cmd/apiServer/main.go && ./main
-
-ctl:
+ctl: fmt vet ## format vet and compile ctl (use go)
 	go build -ldflags '-w -s' -o XingCtl tools/main.go
 
 clean: ## clean local build
-	rm ./main
+	rm ./XingCtl || rm ./XingServer
