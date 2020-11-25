@@ -19,4 +19,5 @@ ctl: fmt vet ## format vet and compile ctl (use go)
 	go build -ldflags '-w -s' -o XingCtl tools/main.go
 
 clean: ## clean local build
-	rm ./XingCtl || rm ./XingServer
+	rm -f ./XingCtl
+	rm -f ./XingServer
