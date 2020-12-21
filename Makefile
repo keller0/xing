@@ -13,11 +13,11 @@ vet: ## vat all go files (use go)
 	go vet $(PACKAGES)
 
 build:fmt vet ## format vet and compile server (use go)
-	go build -ldflags '-w -s' -o XingServer server/main.go
+	go build -ldflags '-w -s' -o xingServer server/main.go
 
 ctl: fmt vet ## format vet and compile ctl (use go)
-	go build -ldflags '-w -s' -o XingCtl tools/main.go
+	go build -ldflags '-w -s' -o xingCtl tools/main.go
 
 clean: ## clean local build
-	rm -f ./XingCtl
-	rm -f ./XingServer
+	rm -f ./xingCtl
+	rm -f ./xingServer

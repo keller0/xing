@@ -5,12 +5,9 @@ import (
 	"github.com/keller0/xing/server/storage"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"time"
 )
-
-var JWTSigningKey = "tom go"
 
 type loginReq struct {
 	Name string `json:"name"`
@@ -39,7 +36,7 @@ func Login(c echo.Context) error {
 		return c.String(http.StatusUnauthorized, "unauthorized")
 	}
 
-	token, et := GenUserToken(req.Name)
+	token, et := GenUserToken(req.Name, u.Id)
 	if et != nil {
 		log.Error(et)
 		return c.String(http.StatusInternalServerError, "gen token failed")
@@ -54,27 +51,18 @@ func Login(c echo.Context) error {
 	return c.JSON(http.StatusOK, ret)
 }
 
-type JwtClaims struct {
-	Name string `json:"name"`
-	jwt.StandardClaims
-}
-
-func GenUserToken(userName string) (string, error) {
+func GenUserToken(userName, id string) (string, error) {
 
 	expTime := time.Now().Add(time.Hour * 24 * 30).Unix()
 
-	claims := JwtClaims{
+	claims := storage.JwtClaims{
 		Name: userName,
+		Id:   id,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expTime,
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	return token.SignedString([]byte(JWTSigningKey))
-}
-
-func HashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
+	return token.SignedString(storage.JWTSigningKey)
 }

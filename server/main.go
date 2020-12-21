@@ -38,7 +38,7 @@ func init() {
 	if err := yaml.Unmarshal(content, &configs); err != nil {
 		panic("unmarshal config content failed")
 	}
-	lv, err := log.ParseLevel("info")
+	lv, err := log.ParseLevel(configs.App.LogLevel)
 	if err != nil {
 		panic(err)
 	}

@@ -1,11 +1,20 @@
 package storage
 
 import (
+	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
 	_ "github.com/mattn/go-sqlite3"
 	log "github.com/sirupsen/logrus"
 	"os"
 )
+
+var JWTSigningKey = []byte("tom go")
+
+type JwtClaims struct {
+	Name string `json:"name"`
+	Id   string `json:"id"`
+	jwt.StandardClaims
+}
 
 var Gdb *gorm.DB
 
