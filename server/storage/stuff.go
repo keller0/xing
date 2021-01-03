@@ -13,9 +13,21 @@ type Notes struct {
 	CreateTime time.Time `json:"create_time" gorm:"column:create_time; type:datetime"`
 }
 
-func (user *User) AddNotes(notes Notes) error {
+func AddNotes(notes Notes) error {
 
-	notes.Uid = user.Id
+	notes.CreateTime = time.Now()
 	return Gdb.Create(&notes).Error
 
+}
+
+func GetNotesByUid(uid string) ([]Notes, error) {
+	var notes []Notes
+	err := Gdb.Where("uid = ?", uid).Find(&notes).Error
+	return notes, err
+}
+
+func GetNotesById(id, uid string) (Notes, error) {
+	var notes Notes
+	err := Gdb.Where("id = ? AND uid = ?", id, uid).Find(&notes).Error
+	return notes, err
 }

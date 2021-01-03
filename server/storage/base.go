@@ -16,6 +16,13 @@ type JwtClaims struct {
 	jwt.StandardClaims
 }
 
+const CtxUserKey = "userInfoKeyInCtx"
+
+type CtxUserInfo struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}
+
 var Gdb *gorm.DB
 
 func InitSqlite(dbPath string) {
