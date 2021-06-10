@@ -3,8 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/keller0/xing/server/config"
 	"github.com/keller0/xing/server/storage"
 	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 )
 
 func HashPassword(password string) (string, error) {
@@ -34,17 +37,26 @@ var (
 )
 
 func main() {
-	flag.StringVar(&dbPath, "db", "x.db", "database path")
+	var configFile = flag.String("conf", "./config.yaml", "config file path")
 	flag.StringVar(&userName, "u", "", "new user name")
 	flag.StringVar(&pass, "p", "", "new user pass")
 
 	flag.Parse()
 
-	storage.InitSqlite(dbPath)
+	var configs config.AllConf
+	content, err := ioutil.ReadFile(*configFile)
+	if err != nil {
+		panic("read config file failed")
+	}
+	if err := yaml.Unmarshal(content, &configs); err != nil {
+		panic("unmarshal config content failed")
+	}
+
+	storage.InitDB(configs.App.MysqlDSN)
 
 	u := storage.User{Name: userName, Pass: pass}
 
-	err := u.Add()
+	err = u.Add()
 	if err != nil {
 		panic(err)
 	}

@@ -7,7 +7,8 @@ import (
 func (Notes) TableName() string { return "notes" }
 
 type Notes struct {
-	Id         string    `json:"id" gorm:"column:id"`
+	Id         int       `json:"id" gorm:"autoIncrement;column:id"`
+	NId        string    `json:"nid" gorm:"primaryKey;column:nid"`
 	Uid        string    `json:"uid" gorm:"column:uid"`
 	Content    string    `json:"content" gorm:"column:content"`
 	CreateTime time.Time `json:"create_time" gorm:"column:create_time; type:datetime"`

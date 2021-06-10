@@ -36,7 +36,7 @@ func Login(c echo.Context) error {
 		return c.String(http.StatusUnauthorized, "unauthorized")
 	}
 
-	token, et := GenUserToken(req.Name, u.Id)
+	token, et := GenUserToken(req.Name, u.UId)
 	if et != nil {
 		log.Error(et)
 		return c.String(http.StatusInternalServerError, "gen token failed")

@@ -3,3 +3,4 @@ app:
   jwt_key: 12312412
   allow_origins: http://localhost:8080
   file_save_folder: /tmp/xingFiles
+  mysql_dsn: user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local

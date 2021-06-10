@@ -17,7 +17,6 @@ import (
 var (
 	serverHost  string
 	serverPort  string
-	dbPath      string
 	allowOrigin []string
 )
 
@@ -25,7 +24,6 @@ func init() {
 	var configFile = flag.String("conf", "./config.yaml", "config file path")
 	flag.StringVar(&serverHost, "host", "127.0.0.1", "listen address")
 	flag.StringVar(&serverPort, "port", "1323", "listen port")
-	flag.StringVar(&dbPath, "db", "x.db", "database path")
 	flag.Parse()
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -50,7 +48,7 @@ func init() {
 	}
 	log.Info(allowOrigin)
 
-	storage.InitSqlite(dbPath)
+	storage.InitDB(configs.App.MysqlDSN)
 
 }
 
@@ -61,6 +59,7 @@ func main() {
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowCredentials: true,
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, "token"},
+		AllowOrigins:     allowOrigin,
 	}))
 
 	// Middleware

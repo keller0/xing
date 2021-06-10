@@ -2,10 +2,9 @@ package storage
 
 import (
 	"github.com/dgrijalva/jwt-go"
-	"github.com/jinzhu/gorm"
-	_ "github.com/mattn/go-sqlite3"
 	log "github.com/sirupsen/logrus"
-	"os"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var JWTSigningKey = []byte("tom go")
@@ -25,25 +24,16 @@ type CtxUserInfo struct {
 
 var Gdb *gorm.DB
 
-func InitSqlite(dbPath string) {
+func InitDB(dsn string) {
 
 	var err error
-	fi, err := os.Stat(dbPath)
+
+	//dsn = "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
+	Gdb, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
 
-	log.Info("open db file", fi.Name())
-
-	Gdb, err = gorm.Open("sqlite3", dbPath)
-	if err != nil {
-		panic(err)
-	}
-	err = Gdb.DB().Ping()
-	if err != nil {
-		log.Error("ping db failed")
-		return
-	}
 	log.Info("init engine succeed")
 	return
 }

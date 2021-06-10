@@ -26,7 +26,7 @@ func NewNotes(c echo.Context) error {
 	id, _ := uuid.NewRandom()
 
 	notes := storage.Notes{
-		Id:      id.String(),
+		NId:     id.String(),
 		Content: req.Content,
 		Uid:     user.Id,
 	}
@@ -37,7 +37,7 @@ func NewNotes(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, http.StatusText(http.StatusInternalServerError))
 	}
 
-	return c.String(http.StatusCreated, notes.Id)
+	return c.String(http.StatusCreated, notes.NId)
 }
 
 func GetNotes(c echo.Context) error {

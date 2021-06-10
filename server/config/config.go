@@ -9,4 +9,5 @@ type AppConfig struct {
 	JwtKey         string `yaml:"jwt_key"`
 	AllowOrigin    string `yaml:"allow_origins"`
 	FileSaveFolder string `yaml:"file_save_folder"`
+	MysqlDSN       string `yaml:"mysql_dsn"`
 }

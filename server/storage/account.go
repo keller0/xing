@@ -3,14 +3,16 @@ package storage
 import (
 	"errors"
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
-func (User) TableName() string { return "user" }
+func (User) TableName() string { return "users" }
 
 type User struct {
-	Id         string    `json:"id" gorm:"column:id"`
+	Id         int       `json:"id" gorm:"autoIncrement;column:id"`
+	UId        string    `json:"uid" gorm:"primaryKey;column:uid"`
 	Name       string    `json:"name" gorm:"column:name"`
 	Pass       string    `json:"pass" gorm:"column:pass"`
 	CreateTime time.Time `json:"create_time" gorm:"column:create_time;type:datetime"`
@@ -19,7 +21,7 @@ type User struct {
 func (user *User) CheckUserAuth() bool {
 	pass := user.Pass
 	Gdb.Where("name = ?", user.Name).First(&user)
-	if len(user.Id) == 0 {
+	if len(user.UId) == 0 {
 		return false
 	}
 	return CheckPasswordHash(pass, user.Pass)
@@ -48,9 +50,11 @@ func (user *User) Add() error {
 	}
 	user.Pass = hash
 	u, _ := uuid.NewRandom()
-	user.Id = u.String()
+	user.UId = u.String()
 	user.CreateTime = time.Now()
 
-	return Gdb.Create(*user).Error
+	res := Gdb.Create(*user)
+	log.Debug(res)
+	return res.Error
 
 }
